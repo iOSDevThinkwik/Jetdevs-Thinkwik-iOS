@@ -11,7 +11,6 @@ import RxCocoa
 
 class LoginViewController: UIViewController {
     
-    
     // MARK: - Outlets -
     
     @IBOutlet weak var loginButton: UIButton! {
@@ -22,7 +21,6 @@ class LoginViewController: UIViewController {
             }).disposed(by: bag)
         }
     }
-    
     @IBOutlet weak var btnCancel: UIButton! {
         didSet {
             btnCancel.rx.tap.subscribe(onNext: { _ in
@@ -40,20 +38,16 @@ class LoginViewController: UIViewController {
             self.emailTextField.textColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1.0)
             self.emailTextField.layer.borderColor = UIColor(red: 189/255, green: 189/255, blue: 189/255, alpha: 1.0).cgColor
             self.emailTextField.font = UIFont.latoRegularFont(size: 16)
-            
             self.emailTextField.autocorrectionType = .no
             self.emailTextField.autocapitalizationType = .none
-            
             self.emailTextField.rx.controlEvent(.editingDidBegin).subscribe { _ in
                 self.emailTextField.layer.borderColor = UIColor(red: 189/255, green: 189/255, blue: 189/255, alpha: 1.0).cgColor
             }.disposed(by: bag)
             self.emailTextField.rx.controlEvent(.allEvents).subscribe { _ in
                 self.checkValidation()
             }.disposed(by: bag)
-            
         }
     }
-    
     @IBOutlet weak var emailLabel: UILabel! {
         didSet {
             self.emailLabel.text = " Email "
@@ -61,7 +55,6 @@ class LoginViewController: UIViewController {
             self.emailLabel.font = UIFont.latoRegularFont(size: 12)
         }
     }
-    
     @IBOutlet weak var passwordTextField: UITextField! {
         didSet {
             self.passwordTextField.placeholder = "Password"
@@ -74,15 +67,12 @@ class LoginViewController: UIViewController {
             self.passwordTextField.font = UIFont.latoRegularFont(size: 16)
             self.passwordTextField.rx.controlEvent(.editingDidBegin).subscribe { _ in
                 self.passwordTextField.layer.borderColor = UIColor(red: 189/255, green: 189/255, blue: 189/255, alpha: 1.0).cgColor
-                
             }.disposed(by: bag)
-            
             self.passwordTextField.rx.controlEvent(.allEvents).subscribe { _ in
                 self.checkValidation()
             }.disposed(by: bag)
         }
     }
-    
     @IBOutlet weak var passwordLabel: UILabel! {
         didSet {
             self.passwordLabel.text = " Password "
@@ -112,12 +102,12 @@ class LoginViewController: UIViewController {
                 if userModel.result == 1 {
                     DispatchQueue.main.async {
                         if self.handler != nil {
-                            self.handler!(true)
+                            self.handler?(true)
                         }
                         self.dismiss(animated: true)
                     }
                 }
-                if userModel.result == 0{
+                if userModel.result == 0 {
                     DispatchQueue.main.async {
                         self.loginButton.backgroundColor = UIColor(red: 159/255, green: 159/255, blue: 159/255, alpha: 1.0)
                         self.showToast(message: self.viewModel.loginData?.errorMessage ?? "Login Unsuccessfull")
@@ -129,14 +119,11 @@ class LoginViewController: UIViewController {
                     self.showToast(message: error)
                 }
             }
-        }
-        else {
+        } else {
             DispatchQueue.main.async {
                 self.showToast(message: result.1)
             }
-           
         }
-        
     }
     
     // MARK: - Helper / Validation -
@@ -152,9 +139,7 @@ class LoginViewController: UIViewController {
     
     func checkValidation() {
         let result = self.viewModel.checkValidations(email: self.emailTextField.text ?? "", password: self.passwordTextField.text ?? "")
-        Logs.printLogs(message: result.1)
-        self.setLoginButton(valid: result.0)
-    }
-    
+            Logs.printLogs(message: result.1)
+            self.setLoginButton(valid: result.0) }
     
 }

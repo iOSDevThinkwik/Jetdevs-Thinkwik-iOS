@@ -13,11 +13,14 @@ class LoginViewModel {
     var loginData: UserModel?
     var user: User?
     
-    // MARK: - Helper / Validation
+    // MARK: - Helper / Validation -
+    
     func checkValidations(email: String, password: String) -> (Bool, String) {
         if email.count == 0 { return (false, "Email address can not be blank") } else if email.isValidEmail() == false { return (false, "Email address is not valid") } else if password.isEmpty == true { return (false, "Password can not be blank") } else if (password.count < 8) == true { return (false, "Password must have at least 8 character") }
         return (true, "Validate successfully")
     }
+    
+    // MARK: - API Implementation -
     
     func loginApi(email: String, password: String, completionHandler: @escaping ( UserModel ) -> (Void), errorHandler: @escaping ( String ) -> (Void)) {
         
@@ -50,7 +53,7 @@ class LoginViewModel {
                 let user = try JSONDecoder().decode(UserModel.self, from: data)
                 self.loginData = user
                 self.user = user.data?.user
-                if self.user != nil{
+                if self.user != nil {
                     // saving User info locally in userDefaults.
                     UserDefaults.standard.removeObject(forKey: UserDefaultsKey.userInfo.rawValue)
                     UserDefaults.standard.setUserInfo(user: self.user!)
